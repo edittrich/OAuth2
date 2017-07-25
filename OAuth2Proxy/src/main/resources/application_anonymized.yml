@@ -1,0 +1,45 @@
+server:
+  context-path: /proxy
+  port: 8443
+  ssl:
+    key-store: keystore.p12
+    key-store-password: mypassword    
+    keyStoreType: PKCS12    
+  session:
+    cookie:
+      name: psessionid
+
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: /api-docs
+
+spring:
+  jackson:
+    date-format: de.edittrich.oauth2.proxy.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    de.edittrich: DEBUG
+    
+proxy:
+  clientId: 9xxx1
+  clientSecret: AxxxA
+  scopes: offline_access+read_accounts+read_partners+read_transactions
+  authorizeURI: https://simulator-api.db.com/gw/oidc/authorize
+  confirmationCodeURI: https://edittrich.de:8443/proxy/confirmationcode.html
+  redirectURI: https://edittrich.de:8443/proxy/redirect
+  tokenURI: https://simulator-api.db.com/gw/oidc/token
+
+amazon:
+  clientId: 9xxx1
+  clientSecret: AxxxA
+  scopes: offline_access+read_accounts+read_partners+read_transactions
+  authorizeURI: https://edittrich.de:8443/proxy/authorize
+  redirectURI: https://layla.amazon.com/api/skill/link/vendorid
+  tokenURI: https://edittrich.de:8443/proxy/token
+  

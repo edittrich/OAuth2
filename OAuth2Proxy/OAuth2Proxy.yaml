@@ -1,0 +1,194 @@
+swagger: '2.0'
+info:
+  title: OAuth2 Proxy
+  version: 1.0.0
+basePath: /proxy
+
+#
+# Paths:
+#
+
+paths:
+  /authorize:
+    get:
+      tags:
+        - Security
+      description: Authorization of the client
+      operationId: authorizeGET
+      produces:
+        - application/json
+      parameters:
+        - name: client_id
+          in: query
+          description: Client ID
+          required: true
+          type: string
+        - name: response_type
+          in: query
+          description: Response Type
+          required: true
+          type: string
+          default: code
+          enum:
+            - code
+        - name: redirect_uri
+          in: query
+          description: Redirect URI
+          required: true
+          type: string
+        - name: state
+          in: query
+          description: State
+          required: false
+          type: string
+        - name: scope
+          in: query
+          description: Scopes list delimited with "+"
+          required: false
+          type: string          
+      responses:
+        302:
+          description: Found (Moved Temporarily)
+        400:
+          $ref: '#/responses/ResponseError'
+ 
+  /redirect:
+    get:
+      tags:
+        - Security
+      description: Redirect
+      operationId: redirectGET
+      produces:
+        - application/json
+      parameters:
+        - name: code
+          in: query
+          description: Authorisation Code
+          required: true
+          type: string
+        - name: state
+          in: query
+          description: State
+          required: false
+          type: string
+      responses:
+        302:
+          description: Found (Moved Temporarily)
+        400:
+          $ref: '#/responses/ResponseError'
+  
+  /token:
+    post:
+      tags:
+        - Security
+      description: Token
+      operationId: tokenPOST
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: Basic Authorization
+          required: true
+          type: string
+                
+        - name: redirect_uri
+          in: query
+          description: Redirect URI
+          required: true
+          type: string
+        - name: grant_type
+          in: query
+          description: Type of Grant
+          required: true
+          type: string
+          default: authorization_code
+          enum:
+            - authorization_code
+            - refresh_token
+        - name: code
+          in: query
+          description: Authorisation Code
+          required: false
+          type: string
+        - name: refresh_token
+          in: query
+          description: Refresh Token
+          required: false
+          type: string          
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/AccessToken'
+        400:
+          $ref: '#/responses/ResponseError'
+
+  /ConfirmationCodes:
+    get:
+      tags:
+        - Security
+      description: Confirmation Codes
+      operationId: codePOST
+      produces:
+        - application/json
+      parameters:
+        - name: confirmation_code
+          in: query
+          description: Confirmation Code
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        default:
+          $ref: '#/responses/ResponseError'
+
+#
+# Responses
+#
+
+responses:
+  ResponseError:
+    description: Unexpected error
+    schema:
+      $ref: "#/definitions/ResponseError"
+
+#
+#  Definitions
+#
+
+definitions:
+
+  AccessToken:
+    type: object
+    required:
+      - access_token
+      - expires_in
+      - token_type
+    properties:
+      access_token:
+        type: string
+      expires_in:
+        type: integer
+        format: int32
+      id_token:
+        type: string
+      refresh_token:
+        type: string
+      scope:
+        type: string
+      token_type:
+        type: string
+
+  ResponseError:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    required:
+      - code
+      - message
+      
