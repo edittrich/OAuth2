@@ -1,0 +1,23 @@
+security:
+  oauth2:
+    client:
+      client-id: acme
+      client-secret: acmesecret
+      scope: read,write
+      auto-approve-scopes: '.*'
+
+dbapi:
+  client:
+    clientId: 41b07145-9048-4f0d-9b81-0f09698b6ba6
+    clientSecret: O5PqzmH43JSrTrbdPTi4oliqgQ9Va2CDKn2shsIt3kfSJqfSkQSFF2r8YuPbM68mm1whryhXQpvlm64H1J9A-Q
+    accessTokenUri: https://simulator-api.db.com/gw/oidc/token
+    userAuthorizationUri: https://simulator-api.db.com/gw/oidc/authorize
+    tokenName: oauth_token
+    authenticationScheme: header
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://simulator-api.db.com/gw/oidc/userinfo
+
+logging:
+  level:
+    org.springframework.security: DEBUG
