@@ -23,6 +23,7 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.multipart.MultipartFile;
 
 import de.edittrich.oauth2.proxy.model.AccessToken;
+import de.edittrich.oauth2.proxy.model.CodeData;
 import de.edittrich.oauth2.proxy.model.ResponseError;
 
 import java.util.Base64;
@@ -56,16 +57,12 @@ public class TokenApiController implements TokenApi {
         @ApiParam(value = "Refresh Token") @RequestParam(value = "refresh_token", required = false) String refreshToken) {
 
        	log.debug("Token");
-       	
-       	byte[] authorizationBytes = Base64.getDecoder().decode(authorization.substring(6));
-       	log.debug("Authorization Header: " + new String(authorizationBytes));
-       	       	
-        authorization = env.getProperty("proxy.clientId") + ":" + env.getProperty("proxy.clientSecret");        
-        byte[] authorizationcoded = Base64.getEncoder().encode(authorization.getBytes());
-        String authorizationHeader = "Basic " + new String(authorizationcoded);
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.set("Authorization", authorizationHeader);
-
+		log.debug("Authorization: " + authorization);
+		log.debug("Redirect URI: " + redirectUri);
+		log.debug("Grant Type: " + grantType);
+		log.debug("Code: " + code);
+		log.debug("Refresh Token: " + refreshToken);
+		
     	String url = env.getProperty("proxy.tokenURI") + "?" 
     			+ "&grant_type=" + grantType
 				+ "&redirect_uri=" + env.getProperty("proxy.redirectURI");
@@ -82,13 +79,33 @@ public class TokenApiController implements TokenApi {
         		url = url + "&refresh_token=" + refreshToken;
     		}
     	}
+    	log.debug("URL Token: " + url);
     	
+       	byte[] authorizationBytesIn = Base64.getDecoder().decode(authorization.substring(6));
+       	String authorizationHeaderIn = new String(authorizationBytesIn);       	
+       	log.debug("Authorization Header In: " + authorizationHeaderIn);
+       	       	
+        String authorizationOut = env.getProperty("proxy.clientId") + ":" + env.getProperty("proxy.clientSecret");        
+        byte[] authorizationBytesOut = Base64.getEncoder().encode(authorizationOut.getBytes());
+        String authorizationHeaderOut = "Basic " + new String(authorizationBytesOut);
+        log.debug("Authorization Header Out: " + authorizationHeaderOut);
+        
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.set("Authorization", authorizationHeaderOut);
         HttpEntity<String> entity = new HttpEntity<String>("parameters", requestHeaders);        
         RestTemplate restTemplate = new RestTemplate(); 
-        ResponseEntity<AccessToken> response = restTemplate.exchange(url, HttpMethod.POST, entity, AccessToken.class);
-        log.debug(response.getBody().toString());
+        ResponseEntity<AccessToken> responseToken = restTemplate.exchange(url, HttpMethod.POST, entity, AccessToken.class);
+        log.debug("Response Token: " + responseToken.getBody());
         
-        return new ResponseEntity<AccessToken>(response.getBody(), response.getStatusCode());    	
+    	url = env.getProperty("proxy.dataURI");
+    	url = url + "/codes/"
+    			+ code;
+    	log.debug("URL Data: " + url);
+    	
+        ResponseEntity<CodeData> response = restTemplate.exchange(url, HttpMethod.GET, null, CodeData.class);
+        log.debug("Response Data: " + response.getBody());
+        
+        return new ResponseEntity<AccessToken>(responseToken.getBody(), responseToken.getStatusCode());    	
     	
     }
 
