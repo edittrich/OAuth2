@@ -1,0 +1,6 @@
+/keystore.p12
+/target/
+/.classpath
+/.project
+/.springBeans
+/.swagger-codegen-ignore

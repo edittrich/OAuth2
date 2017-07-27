@@ -1,0 +1,154 @@
+swagger: '2.0'
+info:
+  title: OAuth2 Data
+  version: 1.0.0
+basePath: /data
+
+#
+# Paths:
+#
+
+paths:
+  /codes/{code}:
+    get:
+      tags:
+        - Data
+      description: Provides OAuth2 authorization data for a given code
+      operationId: codeGET
+      produces:
+        - application/json
+      parameters:
+        - name: code
+          in: path
+          description: OAuth2 authorization code
+          required: true
+          type: string    
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CodeData'
+        400:
+          $ref: '#/responses/ResponseError'
+    post:
+      tags:
+        - Data
+      description: Stores OAuth2 authorization data for a given code
+      operationId: codePOST
+      produces:
+        - application/json
+      parameters:
+        - name: code
+          in: path
+          description: OAuth2 authorization code
+          required: true
+          type: string
+
+        - name: code_data
+          in: body
+          description: OAuth2 authorization code
+          schema:
+            $ref: '#/definitions/CodeData'
+      responses:
+        201:
+          description: Created
+        400:
+          $ref: '#/responses/ResponseError'
+          
+  /customers/{customer_id}:
+    get:
+      tags:
+        - Data
+      description: Provides customer OAuth2 data for a given id
+      operationId: customrGET
+      produces:
+        - application/json
+      parameters:
+        - name: customer_id
+          in: path
+          description: CustomerId
+          required: true
+          type: string    
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerData'      
+        400:
+          $ref: '#/responses/ResponseError'
+    post:
+      tags:
+        - Data
+      description: Stores customer OAuth2 data for a given id
+      operationId: customerPOST
+      consumes:
+        - application/json
+      parameters:
+        - name: customer_id
+          in: path
+          description: CustomerId
+          required: true
+          type: string
+
+        - name: customer_data
+          in: body
+          description: OAuth2 authorization state
+          schema:
+            $ref: '#/definitions/CustomerData'
+      responses:
+        201:
+          description: Created
+        400:
+          $ref: '#/responses/ResponseError'          
+
+#
+# Responses
+#
+
+responses:
+  ResponseError:
+    description: Unexpected error
+    schema:
+      $ref: "#/definitions/ResponseError"
+
+#
+#  Definitions
+#
+
+definitions:
+  CodeData:
+    type: object
+    properties:
+      state:
+        type: string
+      confirmation_code:
+        type: string
+
+  CustomerData:
+    type: object
+    required:
+      - customer_id
+      - confirmation_code
+    properties:
+      customer_id:
+        type: string
+      confirmation_code:
+        type: string
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+      last_changed:
+        type: string
+        format: date-time
+
+  ResponseError:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    required:
+      - code
+      - message
