@@ -19,6 +19,11 @@ public class ResponseError   {
 
   @JsonProperty("message")
   private String message = null;
+  
+  public ResponseError(String code, String message) {
+      this.code = code;
+      this.message = message;
+  }
 
   public ResponseError code(String code) {
     this.code = code;

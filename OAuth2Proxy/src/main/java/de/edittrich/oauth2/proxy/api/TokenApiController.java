@@ -49,7 +49,7 @@ public class TokenApiController implements TokenApi {
 	    return crlf;
 	}
 
-    public ResponseEntity<AccessToken> tokenPOST(@ApiParam(value = "Basic Authorization" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization,
+    public ResponseEntity<?> tokenPOST(@ApiParam(value = "Basic Authorization" ,required=true) @RequestHeader(value="Authorization", required=true) String authorization,
          @NotNull@ApiParam(value = "Redirect URI", required = true) @RequestParam(value = "redirect_uri", required = true) String redirectUri,
          @NotNull@ApiParam(value = "Type of Grant", required = true, allowableValues = "authorization_code, refresh_token", defaultValue = "authorization_code") @RequestParam(value = "grant_type", required = true, defaultValue="authorization_code") String grantType,
         @ApiParam(value = "Authorisation Code") @RequestParam(value = "code", required = false) String code,
@@ -70,9 +70,17 @@ public class TokenApiController implements TokenApi {
     			+ "&grant_type=" + grantType
 				+ "&redirect_uri=" + env.getProperty("proxy.redirectURI");
     	if (grantType.equals("authorization_code")) {
-    		url = url + "&code=" + code;
+        	if ((code == null) || (code.isEmpty())) {
+        		return new ResponseEntity<ResponseError>(new ResponseError("400", "Bad Request"), HttpStatus.BAD_REQUEST);
+        	} else {
+        		url = url + "&code=" + code;
+        	}
     	} else if (grantType.equals("refresh_token")) {
-    		url = url + "&refresh_token=" + refreshToken;
+        	if ((refreshToken == null) || (refreshToken.isEmpty())) {
+        		return new ResponseEntity<ResponseError>(new ResponseError("400", "Bad Request"), HttpStatus.BAD_REQUEST);
+        	} else {
+        		url = url + "&refresh_token=" + refreshToken;
+    		}
     	}
     	
         HttpEntity<String> entity = new HttpEntity<String>("parameters", requestHeaders);        

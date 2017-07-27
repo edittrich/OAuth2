@@ -34,6 +34,6 @@ public interface ConfirmationCodesApi {
     @RequestMapping(value = "/ConfirmationCodes",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Void> codePOST( @NotNull@ApiParam(value = "Confirmation Code", required = true) @RequestParam(value = "confirmation_code", required = true) String confirmationCode);
+    ResponseEntity<?> codePOST( @NotNull@ApiParam(value = "Confirmation Code", required = true) @RequestParam(value = "confirmation_code", required = true) String confirmationCode);
 
 }

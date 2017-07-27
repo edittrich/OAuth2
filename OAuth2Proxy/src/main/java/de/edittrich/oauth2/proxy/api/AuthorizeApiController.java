@@ -63,7 +63,7 @@ public class AuthorizeApiController implements AuthorizeApi {
 		String url = env.getProperty("proxy.authorizeURI") + "?" + "response_type=" + "code" + "&redirect_uri="
 				+ env.getProperty("proxy.redirectURI") + "&client_id=" + env.getProperty("proxy.clientId") + "&state="
 				+ state;
-		if ((scope != null) && (!scope.equals(""))) {
+		if ((scope != null) && (!scope.isEmpty())) {
 			try {
 				url = url + "&scope=" + URLEncoder.encode(scope, "UTF-8");
 			} catch (UnsupportedEncodingException e) {

@@ -48,12 +48,16 @@ public class ConfirmationCodesApiController implements ConfirmationCodesApi {
 	    return crlf;
 	}
 
-    public ResponseEntity<Void> codePOST( @NotNull@ApiParam(value = "Confirmation Code", required = true) @RequestParam(value = "confirmation_code", required = true) String confirmationCode) {
+    public ResponseEntity<?> codePOST( @NotNull@ApiParam(value = "Confirmation Code", required = true) @RequestParam(value = "confirmation_code", required = true) String confirmationCode) {
 
     	log.debug("ComfirmationCode");
 
     	String code = (String) httpSession.getAttribute("proxyCode");
     	String state = (String) httpSession.getAttribute("proxyState");
+    	
+    	if ((code == null) || (state == null)) {
+    		return new ResponseEntity<ResponseError>(new ResponseError("400", "Bad Request"), HttpStatus.BAD_REQUEST);
+    	}
     	
     	log.debug("Code: " + code);
     	log.debug("State: " + state);
