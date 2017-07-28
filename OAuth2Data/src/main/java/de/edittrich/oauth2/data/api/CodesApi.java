@@ -22,10 +22,20 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import javax.validation.constraints.*;
 import javax.validation.Valid;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-27T15:59:07.701Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-28T15:37:24.170Z")
 
 @Api(value = "codes", description = "the codes API")
 public interface CodesApi {
+
+    @ApiOperation(value = "", notes = "Deletes OAuth2 authorization data for a given code", response = Void.class, tags={ "Data", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Created", response = Void.class),
+        @ApiResponse(code = 400, message = "Unexpected error", response = ResponseError.class) })
+    
+    @RequestMapping(value = "/codes/{code}",
+        method = RequestMethod.DELETE)
+    ResponseEntity<?> codeDELETE(@ApiParam(value = "OAuth2 authorization code",required=true ) @PathVariable("code") String code);
+
 
     @ApiOperation(value = "", notes = "Provides OAuth2 authorization data for a given code", response = CodeData.class, tags={ "Data", })
     @ApiResponses(value = { 
@@ -44,7 +54,7 @@ public interface CodesApi {
         @ApiResponse(code = 400, message = "Unexpected error", response = ResponseError.class) })
     
     @RequestMapping(value = "/codes/{code}",
-        produces = { "application/json" }, 
+        consumes = { "application/json" },
         method = RequestMethod.POST)
     ResponseEntity<Void> codePOST(@ApiParam(value = "OAuth2 authorization code",required=true ) @PathVariable("code") String code,@ApiParam(value = "OAuth2 authorization code"  )  @Valid @RequestBody CodeData codeData);
 

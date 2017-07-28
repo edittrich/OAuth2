@@ -35,8 +35,8 @@ paths:
         - Data
       description: Stores OAuth2 authorization data for a given code
       operationId: codePOST
-      produces:
-        - application/json
+      consumes:
+        - application/json      
       parameters:
         - name: code
           in: path
@@ -54,7 +54,23 @@ paths:
           description: Created
         400:
           $ref: '#/responses/ResponseError'
-          
+    delete:
+      tags:
+        - Data
+      description: Deletes OAuth2 authorization data for a given code
+      operationId: codeDELETE
+      parameters:
+        - name: code
+          in: path
+          description: OAuth2 authorization code
+          required: true
+          type: string
+      responses:
+        200:
+          description: Created
+        400:
+          $ref: '#/responses/ResponseError'          
+
   /customers/{customer_id}:
     get:
       tags:

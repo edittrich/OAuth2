@@ -58,6 +58,7 @@ public class CustomersApiController implements CustomersApi {
 		CustomerData customerData = customersRepository
 				.findByCustomerId(customerId)
 				.map(c -> {
+					log.debug("Found");
 					CustomerData cd = new CustomerData();
 					cd.setConfirmationCode(c.getConfirmationCode());
 					cd.setAccessToken(c.getAccessToken());
@@ -81,7 +82,8 @@ public class CustomersApiController implements CustomersApi {
 		
 		Customers customers = customersRepository
 				.findByCustomerId(customerId)
-				.map(c -> {log.debug("Found");return c;})
+				.map(c -> {log.debug("Found");
+					return c;})
 				.orElse(new Customers(customerId));
 				
 		customers.setConfirmationCode(customerData.getConfirmationCode());

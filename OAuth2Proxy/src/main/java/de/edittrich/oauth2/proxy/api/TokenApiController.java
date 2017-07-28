@@ -102,30 +102,30 @@ public class TokenApiController implements TokenApi {
         HttpEntity<String> entityToken = new HttpEntity<String>("parameters", requestTokenHeaders);        
 
         ResponseEntity<AccessToken> responseToken = restTemplate.exchange(url, HttpMethod.POST, entityToken, AccessToken.class);
-        log.debug("Response Token: " + responseToken.getBody());
+        log.debug("Response Token Post: " + responseToken.getBody());
         
         //
         
         url = env.getProperty("proxy.userInfoUri");
-    	log.debug("URL UserInfo: " + url);
+    	log.debug("URL UserInfo Get: " + url);
     	
         HttpHeaders requestUserInfoHeaders = new HttpHeaders();
         requestUserInfoHeaders.set("Authorization", "Bearer " + responseToken.getBody().getAccessToken());
         HttpEntity<String> entityUserInfo = new HttpEntity<String>("parameters", requestUserInfoHeaders);        
         ResponseEntity<UserInfo> responseUserInfo = restTemplate.exchange(url, HttpMethod.GET, entityUserInfo, UserInfo.class);
         String customerId = responseUserInfo.getBody().getSub();
-        log.debug("UserInfo: " + responseUserInfo.getBody());
+        log.debug("Response UserInfo Get: " + responseUserInfo.getBody());
         
         //
         
     	url = env.getProperty("proxy.dataURI");
     	url = url + "/codes/"
     			+ code;
-    	log.debug("URL Data Codes: " + url);
+    	log.debug("URL Data Code: " + url);
     	
-        ResponseEntity<CodeData> response = restTemplate.exchange(url, HttpMethod.GET, null, CodeData.class);
-        String confirmationCode = response.getBody().getConfirmationCode();
-        log.debug("Response Data Codes: " + response.getBody());
+        ResponseEntity<CodeData> responseCodeGet = restTemplate.exchange(url, HttpMethod.GET, null, CodeData.class);
+        String confirmationCode = responseCodeGet.getBody().getConfirmationCode();
+        log.debug("Response Data Code Get: " + responseCodeGet.getBody());
         
     	url = env.getProperty("proxy.dataURI");
     	url = url + "/customers/"
@@ -137,10 +137,18 @@ public class TokenApiController implements TokenApi {
         customerData.setAccessToken(responseToken.getBody().getAccessToken());
         customerData.setRefreshToken(responseToken.getBody().getRefreshToken());
         customerData.setLastChanged(new DateTime());
-        HttpEntity<CustomerData> requestCustomers = new HttpEntity<>(customerData);        
-        ResponseEntity<CustomerData> responseCustomers = restTemplate.exchange(url, HttpMethod.POST, requestCustomers, CustomerData.class);        
-        log.debug("Response Data Customers: " + responseCustomers.getStatusCodeValue());
+        HttpEntity<CustomerData> requestCustomer = new HttpEntity<>(customerData);        
+        ResponseEntity<CustomerData> responseCustomer = restTemplate.exchange(url, HttpMethod.POST, requestCustomer, CustomerData.class);        
+        log.debug("Response Data Customers Post: " + responseCustomer.getStatusCodeValue());
     	
+    	url = env.getProperty("proxy.dataURI");
+    	url = url + "/codes/"
+    			+ code;
+    	log.debug("URL Data Codes: " + url);
+    	
+        ResponseEntity<String> responseCodeDelete = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+        log.debug("Response Data Code Delete: " + responseCodeDelete.getBody());
+        
     	//        
         
         return new ResponseEntity<AccessToken>(responseToken.getBody(), responseToken.getStatusCode());    	

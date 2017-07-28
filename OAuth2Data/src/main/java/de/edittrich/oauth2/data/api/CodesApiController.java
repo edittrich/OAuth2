@@ -49,15 +49,36 @@ public class CodesApiController implements CodesApi {
 		crlf.setIncludeQueryString(true);
 		crlf.setIncludePayload(true);
 		return crlf;
-	} 
+	}
+	
+    public ResponseEntity<?> codeDELETE(@ApiParam(value = "OAuth2 authorization code",required=true ) @PathVariable("code") String code) {
+    	
+		log.debug("codeDELETE");
+
+		Boolean deleted = codesRepository
+				.findByCode(code)
+				.map(c -> {
+					log.debug("Found");
+					codesRepository.delete(c);
+					return true;
+				}).orElse(false);
+
+		if (deleted) {
+			return new ResponseEntity<CodeData>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<ResponseError>(new ResponseError("400", "Bad Request"), HttpStatus.BAD_REQUEST);
+		}
+		
+    }
 
     public ResponseEntity<?> codeGET(@ApiParam(value = "OAuth2 authorization code",required=true ) @PathVariable("code") String code) {
-
+    	
 		log.debug("codeGET");
 
 		CodeData codeData = codesRepository
 				.findByCode(code)
 				.map(c -> {
+					log.debug("Found");
 					CodeData cd = new CodeData();
 					cd.setState(c.getState());
 					cd.setConfirmationCode(c.getConfirmationCode());
@@ -79,7 +100,9 @@ public class CodesApiController implements CodesApi {
 		
 		Codes codes = codesRepository
 				.findByCode(code)
-				.map(c -> {log.debug("Found");return c;})
+				.map(c -> {
+					log.debug("Found");
+					return c;})
 				.orElse(new Codes(code));
 				
 		codes.setConfirmationCode(codeData.getConfirmationCode());
