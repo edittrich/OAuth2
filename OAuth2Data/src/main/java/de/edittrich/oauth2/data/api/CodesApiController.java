@@ -49,7 +49,7 @@ public class CodesApiController implements CodesApi {
 		crlf.setIncludeQueryString(true);
 		crlf.setIncludePayload(true);
 		return crlf;
-	}
+	} 
 
     public ResponseEntity<?> codeGET(@ApiParam(value = "OAuth2 authorization code",required=true ) @PathVariable("code") String code) {
 

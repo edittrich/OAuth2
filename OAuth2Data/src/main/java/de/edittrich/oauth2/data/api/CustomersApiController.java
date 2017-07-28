@@ -1,5 +1,11 @@
 package de.edittrich.oauth2.data.api;
 
+import de.edittrich.oauth2.data.model.Codes;
+import de.edittrich.oauth2.data.model.CustomerData;
+import de.edittrich.oauth2.data.model.Customers;
+import de.edittrich.oauth2.data.model.CustomersRepository;
+import de.edittrich.oauth2.data.model.ResponseError;
+
 import io.swagger.annotations.*;
 
 import org.slf4j.Logger;
@@ -16,17 +22,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import de.edittrich.oauth2.data.model.CodesRepository;
-import de.edittrich.oauth2.data.model.CustomerData;
-import de.edittrich.oauth2.data.model.CustomersRepository;
-import de.edittrich.oauth2.data.model.ResponseError;
-
+import java.net.URI;
 import java.util.List;
 
 import javax.validation.constraints.*;
 import javax.validation.Valid;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-27T14:19:28.420Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-28T14:45:09.156Z")
 
 @Controller
 public class CustomersApiController implements CustomersApi {
@@ -48,16 +51,49 @@ public class CustomersApiController implements CustomersApi {
 		return crlf;
 	}
 
+    public ResponseEntity<?> customerGET(@ApiParam(value = "CustomerId",required=true ) @PathVariable("customer_id") String customerId) {
 
-    public ResponseEntity<Void> customerPOST(@ApiParam(value = "CustomerId",required=true ) @PathVariable("customer_id") String customerId,
-        @ApiParam(value = "OAuth2 authorization state"  )  @Valid @RequestBody CustomerData customer_data) {
-        // do some magic!
-        return new ResponseEntity<Void>(HttpStatus.OK);
+		log.debug("customerGET");
+
+		CustomerData customerData = customersRepository
+				.findByCustomerId(customerId)
+				.map(c -> {
+					CustomerData cd = new CustomerData();
+					cd.setConfirmationCode(c.getConfirmationCode());
+					cd.setAccessToken(c.getAccessToken());
+					cd.setRefreshToken(c.getRefreshToken());
+					cd.setLastChanged(c.getLastChanged());					
+					return cd;
+				}).orElse(null);
+
+		if (customerData == null) {
+			return new ResponseEntity<ResponseError>(new ResponseError("400", "Bad Request"), HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<CustomerData>(customerData, HttpStatus.OK);
+		}
+
     }
 
-    public ResponseEntity<CustomerData> customrGET(@ApiParam(value = "CustomerId",required=true ) @PathVariable("customer_id") String customerId) {
-        // do some magic!
-        return new ResponseEntity<CustomerData>(HttpStatus.OK);
+    public ResponseEntity<Void> customerPOST(@ApiParam(value = "CustomerId",required=true ) @PathVariable("customer_id") String customerId,
+        @ApiParam(value = "OAuth2 authorization state"  )  @Valid @RequestBody CustomerData customerData) {
+    	
+		log.debug("customersPOST");
+		
+		Customers customers = customersRepository
+				.findByCustomerId(customerId)
+				.map(c -> {log.debug("Found");return c;})
+				.orElse(new Customers(customerId));
+				
+		customers.setConfirmationCode(customerData.getConfirmationCode());
+		customers.setAccessToken(customerData.getAccessToken());
+		customers.setRefreshToken(customerData.getRefreshToken());
+		customers.setLastChanged(customerData.getLastChanged());
+		customersRepository.save(customers);
+		
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/customer/{customerId}")
+				.buildAndExpand(customers.getCustomerId()).toUri();
+
+		return ResponseEntity.created(location).build();
     }
 
 }

@@ -5,6 +5,9 @@
  */
 package de.edittrich.oauth2.data.api;
 
+import de.edittrich.oauth2.data.model.CustomerData;
+import de.edittrich.oauth2.data.model.ResponseError;
+
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,27 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import de.edittrich.oauth2.data.model.CustomerData;
-import de.edittrich.oauth2.data.model.ResponseError;
-
 import java.util.List;
 import javax.validation.constraints.*;
 import javax.validation.Valid;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-27T14:19:28.420Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-28T14:45:09.156Z")
 
 @Api(value = "customers", description = "the customers API")
 public interface CustomersApi {
-
-    @ApiOperation(value = "", notes = "Stores customer OAuth2 data for a given id", response = Void.class, tags={ "Data", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 201, message = "Created", response = Void.class),
-        @ApiResponse(code = 400, message = "Unexpected error", response = ResponseError.class) })
-    
-    @RequestMapping(value = "/customers/{customer_id}",
-        produces = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<Void> customerPOST(@ApiParam(value = "CustomerId",required=true ) @PathVariable("customer_id") String customerId,@ApiParam(value = "OAuth2 authorization state"  )  @Valid @RequestBody CustomerData customer_data);
-
 
     @ApiOperation(value = "", notes = "Provides customer OAuth2 data for a given id", response = CustomerData.class, tags={ "Data", })
     @ApiResponses(value = { 
@@ -46,6 +35,17 @@ public interface CustomersApi {
     @RequestMapping(value = "/customers/{customer_id}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<CustomerData> customrGET(@ApiParam(value = "CustomerId",required=true ) @PathVariable("customer_id") String customerId);
+    ResponseEntity<?> customerGET(@ApiParam(value = "CustomerId",required=true ) @PathVariable("customer_id") String customerId);
+
+
+    @ApiOperation(value = "", notes = "Stores customer OAuth2 data for a given id", response = Void.class, tags={ "Data", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 201, message = "Created", response = Void.class),
+        @ApiResponse(code = 400, message = "Unexpected error", response = ResponseError.class) })
+    
+    @RequestMapping(value = "/customers/{customer_id}",
+        consumes = { "application/json" },
+        method = RequestMethod.POST)
+    ResponseEntity<Void> customerPOST(@ApiParam(value = "CustomerId",required=true ) @PathVariable("customer_id") String customerId,@ApiParam(value = "OAuth2 authorization state"  )  @Valid @RequestBody CustomerData customerData);
 
 }

@@ -60,7 +60,7 @@ paths:
       tags:
         - Data
       description: Provides customer OAuth2 data for a given id
-      operationId: customrGET
+      operationId: customerGET
       produces:
         - application/json
       parameters:
@@ -126,12 +126,7 @@ definitions:
 
   CustomerData:
     type: object
-    required:
-      - customer_id
-      - confirmation_code
     properties:
-      customer_id:
-        type: string
       confirmation_code:
         type: string
       access_token:

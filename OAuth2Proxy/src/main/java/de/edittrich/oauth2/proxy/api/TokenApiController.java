@@ -133,7 +133,6 @@ public class TokenApiController implements TokenApi {
     	log.debug("URL Data Customers: " + url);
     	
         CustomerData customerData = new CustomerData();
-        customerData.setCustomerId(customerId);
         customerData.setConfirmationCode(confirmationCode);
         customerData.setAccessToken(responseToken.getBody().getAccessToken());
         customerData.setRefreshToken(responseToken.getBody().getRefreshToken());

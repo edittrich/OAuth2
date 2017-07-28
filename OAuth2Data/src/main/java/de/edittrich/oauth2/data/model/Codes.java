@@ -1,5 +1,6 @@
 package de.edittrich.oauth2.data.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -36,10 +37,10 @@ public class Codes {
         this.confirmationCode = confirmationCode;
     }
     
-    public String code;
-    @Size(max=2048)
-    public String state;
-    public String confirmationCode;
+    private String code;
+    @Column(length = 2048)
+    private String state;
+    private String confirmationCode;
 
     public Codes(String code) {
         this.code = code;    	

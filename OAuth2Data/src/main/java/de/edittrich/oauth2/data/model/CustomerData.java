@@ -12,12 +12,9 @@ import javax.validation.constraints.*;
 /**
  * CustomerData
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-27T14:19:28.420Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-28T14:45:09.156Z")
 
 public class CustomerData   {
-  @JsonProperty("customer_id")
-  private String customerId = null;
-
   @JsonProperty("confirmation_code")
   private String confirmationCode = null;
 
@@ -30,27 +27,6 @@ public class CustomerData   {
   @JsonProperty("last_changed")
   private DateTime lastChanged = null;
 
-  public CustomerData customerId(String customerId) {
-    this.customerId = customerId;
-    return this;
-  }
-
-   /**
-   * Get customerId
-   * @return customerId
-  **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-
-  public String getCustomerId() {
-    return customerId;
-  }
-
-  public void setCustomerId(String customerId) {
-    this.customerId = customerId;
-  }
-
   public CustomerData confirmationCode(String confirmationCode) {
     this.confirmationCode = confirmationCode;
     return this;
@@ -60,8 +36,7 @@ public class CustomerData   {
    * Get confirmationCode
    * @return confirmationCode
   **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
+  @ApiModelProperty(value = "")
 
 
   public String getConfirmationCode() {
@@ -143,8 +118,7 @@ public class CustomerData   {
       return false;
     }
     CustomerData customerData = (CustomerData) o;
-    return Objects.equals(this.customerId, customerData.customerId) &&
-        Objects.equals(this.confirmationCode, customerData.confirmationCode) &&
+    return Objects.equals(this.confirmationCode, customerData.confirmationCode) &&
         Objects.equals(this.accessToken, customerData.accessToken) &&
         Objects.equals(this.refreshToken, customerData.refreshToken) &&
         Objects.equals(this.lastChanged, customerData.lastChanged);
@@ -152,7 +126,7 @@ public class CustomerData   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(customerId, confirmationCode, accessToken, refreshToken, lastChanged);
+    return Objects.hash(confirmationCode, accessToken, refreshToken, lastChanged);
   }
 
   @Override
@@ -160,7 +134,6 @@ public class CustomerData   {
     StringBuilder sb = new StringBuilder();
     sb.append("class CustomerData {\n");
     
-    sb.append("    customerId: ").append(toIndentedString(customerId)).append("\n");
     sb.append("    confirmationCode: ").append(toIndentedString(confirmationCode)).append("\n");
     sb.append("    accessToken: ").append(toIndentedString(accessToken)).append("\n");
     sb.append("    refreshToken: ").append(toIndentedString(refreshToken)).append("\n");
@@ -180,4 +153,3 @@ public class CustomerData   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-
