@@ -63,6 +63,7 @@ public class AuthorizeApiController implements AuthorizeApi {
 		String url = env.getProperty("proxy.authorizeURI") + "?" + "response_type=" + "code" + "&redirect_uri="
 				+ env.getProperty("proxy.redirectURI") + "&client_id=" + env.getProperty("proxy.clientId") + "&state="
 				+ state;
+		/*
 		if ((scope != null) && (!scope.isEmpty())) {
 			try {
 				url = url + "&scope=" + URLEncoder.encode(scope, "UTF-8");
@@ -71,6 +72,7 @@ public class AuthorizeApiController implements AuthorizeApi {
 			}
 			
 		}
+		*/
 		log.debug("URL: " + url);
 		
 		HttpHeaders responseHeaders = new HttpHeaders();
