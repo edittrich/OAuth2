@@ -29,7 +29,7 @@ public interface ConfirmationCodesApi {
     @ApiOperation(value = "", notes = "Confirmation Codes", response = Void.class, tags={ "Security", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = Void.class),
-        @ApiResponse(code = 200, message = "Unexpected error", response = ResponseError.class) })
+        @ApiResponse(code = 400, message = "Unexpected error", response = ResponseError.class) })
     
     @RequestMapping(value = "/ConfirmationCodes",
         produces = { "application/json" }, 

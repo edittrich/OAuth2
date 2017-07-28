@@ -141,7 +141,7 @@ paths:
       responses:
         200:
           description: OK
-        default:
+        400:
           $ref: '#/responses/ResponseError'
 
 #
