@@ -2,6 +2,7 @@ package de.edittrich.oauth2.proxy.api;
 
 import io.swagger.annotations.*;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,6 +137,7 @@ public class TokenApiController implements TokenApi {
         customerData.setConfirmationCode(confirmationCode);
         customerData.setAccessToken(responseToken.getBody().getAccessToken());
         customerData.setRefreshToken(responseToken.getBody().getRefreshToken());
+        customerData.setLastChanged(new DateTime());
         HttpEntity<CustomerData> requestCustomers = new HttpEntity<>(customerData);        
         ResponseEntity<CustomerData> responseCustomers = restTemplate.exchange(url, HttpMethod.POST, requestCustomers, CustomerData.class);        
         log.debug("Response Data Customers: " + responseCustomers.getStatusCodeValue());
