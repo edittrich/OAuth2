@@ -28,18 +28,20 @@ logging:
     
 proxy:
   clientId: 9xxx1
-  clientSecret: AxxxA
-  scopes: offline_access+read_accounts+read_partners+read_transactions
+  clientSecret: ZxxxA
+  scopes: offline_access+openid+read_accounts+read_partners+read_transactions
   authorizeURI: https://simulator-api.db.com/gw/oidc/authorize
   confirmationCodeURI: https://edittrich.de:8443/proxy/confirmationcode.html
+  dataURI: https://edittrich.de:8444/data
   redirectURI: https://edittrich.de:8443/proxy/redirect
   tokenURI: https://simulator-api.db.com/gw/oidc/token
+  userInfoUri: https://simulator-api.db.com/gw/oidc/userinfo
 
 amazon:
   clientId: 9xxx1
-  clientSecret: AxxxA
-  scopes: offline_access+read_accounts+read_partners+read_transactions
+  clientSecret: ZxxxA
+  scopes: offline_access+openid+read_accounts+read_partners+read_transactions
   authorizeURI: https://edittrich.de:8443/proxy/authorize
-  redirectURI: https://layla.amazon.com/api/skill/link/vendorid
+  redirectURI: https://layla.amazon.com/api/skill/link/MF6IKZIC0RPPL
   tokenURI: https://edittrich.de:8443/proxy/token
   
