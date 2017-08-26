@@ -24,3 +24,5 @@ keytool -importkeystore -srckeystore edittrich.p12 -srcstoretype PKCS12 -destkey
 
 keytool -genkey -keyalg RSA -alias selfsigned -keystore selfsigned.jks -storepass mypassword -validity 360 -keysize 2048
 keytool -exportcert -rfc -alias selfsigned -keystore selfsigned.jks -file selfsigned.pem
+
+keytool -export -keystore selfsigned.jks -alias selfsigned -file selfsigned.cer

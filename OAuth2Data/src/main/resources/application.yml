@@ -2,9 +2,9 @@ server:
   context-path: /data
   port: 8444
   ssl:
-    key-store: keystore.p12
+    key-store: edittrich.jks
     key-store-password: mypassword    
-    keyStoreType: PKCS12    
+    keyStoreType: JKS    
 
 springfox:
   documentation:
