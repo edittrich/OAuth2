@@ -1,6 +1,6 @@
 server:
   context-path: /data
-  port: 8444
+  port: 8445
   ssl:
     key-store: edittrich.jks
     key-store-password: mypassword    
