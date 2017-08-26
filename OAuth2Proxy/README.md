@@ -16,3 +16,11 @@ You can view the api documentation in swagger-ui by pointing to
 http://localhost:8080/  
 
 Change default port value in application.properties
+
+##Certificate
+cat cert.pem chain.pem > certchain.pem
+openssl pkcs12 -export -in certchain.pem -inkey privkey.pem -out edittrich.p12
+keytool -importkeystore -srckeystore edittrich.p12 -srcstoretype PKCS12 -destkeystore edittrich.jks -deststoretype JKS
+
+keytool -genkey -keyalg RSA -alias selfsigned -keystore selfsigned.jks -storepass mypassword -validity 360 -keysize 2048
+keytool -exportcert -rfc -alias selfsigned -keystore selfsigned.jks -file selfsigned.pem
