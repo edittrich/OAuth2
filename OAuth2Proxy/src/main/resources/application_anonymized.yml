@@ -1,6 +1,6 @@
 server:
   context-path: /proxy
-  port: 8443
+  port: 8444
   ssl:
     key-store: keystore.p12
     key-store-password: mypassword    
@@ -31,9 +31,9 @@ proxy:
   clientSecret: ZxxxA
   scopes: offline_access+openid+read_accounts+read_partners+read_transactions
   authorizeURI: https://simulator-api.db.com/gw/oidc/authorize
-  confirmationCodeURI: https://edittrich.de:8443/proxy/confirmationcode.html
-  dataURI: https://edittrich.de:8444/data
-  redirectURI: https://edittrich.de:8443/proxy/redirect
+  confirmationCodeURI: https://edittrich.de:8444/proxy/confirmationcode.html
+  dataURI: https://edittrich.de:8445/data
+  redirectURI: https://edittrich.de:8444/proxy/redirect
   tokenURI: https://simulator-api.db.com/gw/oidc/token
   userInfoUri: https://simulator-api.db.com/gw/oidc/userinfo
 
@@ -41,7 +41,7 @@ amazon:
   clientId: 9xxx1
   clientSecret: ZxxxA
   scopes: offline_access+openid+read_accounts+read_partners+read_transactions
-  authorizeURI: https://edittrich.de:8443/proxy/authorize
+  authorizeURI: https://edittrich.de:8444/proxy/authorize
   redirectURI: https://layla.amazon.com/api/skill/link/MF6IKZIC0RPPL
-  tokenURI: https://edittrich.de:8443/proxy/token
+  tokenURI: https://edittrich.de:8444/proxy/token
   
